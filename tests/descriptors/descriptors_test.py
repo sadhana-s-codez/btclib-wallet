@@ -1009,12 +1009,12 @@ def test_multipath_descriptors_reads_a_long_text_quickly() -> None:
     ids=["pk(", "musig("],
 )
 def test_multipath_descriptors_reads_open_brackets_quickly(text: str) -> None:
-    """Read a long text of brackets it never closes in well under the bound.
+   """Read a long text of brackets it never closes in well under the bound.
 
-    Each "(" opens an argument that runs to the end of the text, so a pass
-    that looks ahead for where an argument ends, from each one, reads the
-    text again for every bracket: the bound is below that.
-    """
+Each "(" opens an argument that runs to the end of the text. Looking
+ahead from each bracket would rescan the whole text for every bracket,
+doing far more work than a single pass.
+"""
     start = time.perf_counter()
     assert multipath_descriptors(text) == [add_checksum(text)]
     assert time.perf_counter() - start < 15
